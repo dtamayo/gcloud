@@ -94,8 +94,6 @@ else
 	@echo "it easier for you."
 	@echo "  - copying continue_sim.py"
 	gcloud compute ssh condor-submit --command "gsutil cp gs://${bucketname}/continue_sim.py ."
-	@echo "  - copying the datafiles"
-	gcloud compute ssh condor-submit --command "gsutil cp gs://${bucketname}/data/* ./"
 	@echo "  - copying the condor submit files templates"
 	gcloud compute ssh condor-submit --command "gsutil cp gs://${bucketname}/htcondor/* ."
 	@echo "now just sshing"
