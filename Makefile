@@ -16,6 +16,11 @@
 #
 # basic commandlines stored that execute the various pieces of the demonstration
 
+test:
+ifeq ($(BUCKETNAME),)
+	@echo "bucketname not set"
+endif
+
 show:
 	cat README.md
 
@@ -51,34 +56,19 @@ deleteimages:
 	-gcloud compute images delete --quiet condor-compute
 	-gcloud compute images delete --quiet condor-submit
 
-download:
-ifeq ($(apikey),)
-	@echo "Please Register at https://www.quandl.com/sign-up-modal and when you get an API key, rerun this command"
-	@echo "with the apikey defined:"
-	@echo "  make download apikey=\"<add your quandl key here>\""
-else 
-	@echo "using apikey=${apikey} to download datafile"
-	@wget -O - "https://www.quandl.com/api/v3/datatables/WIKI/PRICES?qopts.export=true&api_key=${apikey}&date.gt=2018-01-01" | python -c "import sys, json; print json.load(sys.stdin)['datatable_bulk_download']['file']['link']" > link.file
-	@wget -i link.file -O WIKI_PRICES_2018-01-01.zip
-	@unzip WIKI_PRICES_2018-01-01.zip
-	@mv WIKI_PRICES*.csv data/WIKI_PRICES_2018-01-01.csv
-	-@rm WIKI_PRICES_2018-01-01.zip
-endif
-
-upload: data/WIKI_PRICES_2018-01-01.csv htcondor/run_htcondor.sh
+upload: htcondor/run_htcondor.sh
 ifeq ($(bucketname),)
-	@echo "to upload the datafile (make sure you first run make download to pull the data from quandl.  then rerun this command"
-	@echo "adding the gcs bucketname to create and push the data to."
-	@echo "  make upload bucketname=<some bucket name>"
+	@echo "Need to create bucket on google cloud and run with"
+	@echo "make upload bucketname=insert_bucket_name"
 else 
 	@echo "using ${bucketname}"
 	-gsutil mb gs://${bucketname}
-	gsutil cp data/WIKI_PRICES_2018-01-01.csv gs://${bucketname}/data/
-	gsutil cp data/companies.csv gs://${bucketname}/data/
-	gsutil cp model/* gs://${bucketname}/model/
+	gsutil cp data/input/* gs://${bucketname}/data/input/
+	gsutil cp continue_sim.py gs://${bucketname}/
 	gsutil cp htcondor/* gs://${bucketname}/htcondor/
 endif
 
+# This inserts your bucketname into the run shell script
 htcondor/run_htcondor.sh:
 	cp htcondor/run_montecarlo.sh.orig htcondor/run_montecarlo.sh
 ifneq ($(bucketname),)
@@ -96,14 +86,14 @@ destroycluster:
 ssh:
 ifeq ($(bucketname),)
 	@echo "set the bucketname in order to copy some of the data and model files to the submit host"
-	@echo "  make sshtocluster bucketname=<some bucket name>"
+	@echo "  make ssh bucketname=insert_bucket_name"
 	gcloud compute ssh condor-submit
 else
 	@echo "using ${bucketname}"
 	@echo "before sshing to the submit host, let me copy some of the files there to make"
 	@echo "it easier for you."
-	@echo "  - copying the model"
-	gcloud compute ssh condor-submit --command "gsutil cp gs://${bucketname}/model/* ."
+	@echo "  - copying continue_sim.py"
+	gcloud compute ssh condor-submit --command "gsutil cp gs://${bucketname}/continue_sim.py ."
 	@echo "  - copying the datafiles"
 	gcloud compute ssh condor-submit --command "gsutil cp gs://${bucketname}/data/* ./"
 	@echo "  - copying the condor submit files templates"
