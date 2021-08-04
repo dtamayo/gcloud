@@ -63,7 +63,7 @@ ifeq ($(bucketname),)
 else 
 	@echo "using ${bucketname}"
 	-gsutil mb gs://${bucketname}
-	gsutil cp data/input/* gs://${bucketname}/data/input/
+	gsutil cp -r data gs://${bucketname}/
 	gsutil cp continue_sim.py gs://${bucketname}/
 	gsutil cp htcondor/* gs://${bucketname}/htcondor/
 endif
