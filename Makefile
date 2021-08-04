@@ -112,25 +112,5 @@ else
 	gcloud compute ssh condor-submit
 endif
 
-bq: 
-ifeq ($(bucketname),)
-	@echo "to upload result file to bigquery, rerun this command but add the bucketname"
-	@echo "  make bq bucketname=<some bucket name>"
-else
-	@echo "loading data from gs://${bucketname}/output/*.csv to bigquery table varBQTable"
-	-bq mk montecarlo_outputs
-	bq load --autodetect --source_format=CSV ${GOOGLE_CLOUD_PROJECT}:montecarlo_outputs.vartable gs://${bucketname}/output/*.csv 
-	cat bq-aggregate.sql | bq query --destination_table montecarlo_outputs.portfolio > /dev/null
-	@echo "\n"
-	@echo "done..."
-endif
-
-rmbq:
-	@echo "deleting dataset from bq: ${GOOGLE_CLOUD_PROJECT}:montecarlo_outputs"
-	bq rm -rf ${GOOGLE_CLOUD_PROJECT}:montecarlo_outputs
-	@echo "\n"
-	@echo "done..."
-
-
 clean:
 	rm link.file WIKI_PRICES*.zip WIKI_PRICES*.csv 
