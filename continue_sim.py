@@ -27,30 +27,29 @@ import pandas
 
 
 def _parse_args():
-    parser = argparse.ArgumentParser('randomwalk', 
-                                     description='Monte-Carlo simulation of stock prices '
-                                                 'behavior based on data from quandl')
-    parser.add_argument('-n', 
-                        '--snum', 
-                        type=int, 
-                        default=1000, 
-                        help='number of simulations (default:%(default)s)')
-    parser.add_argument('-c', 
-                        '--company', 
+    parser = argparse.ArgumentParser('continue_sim', 
+                                     description='continue REBOUND integration')
+
+    parser.add_argument('-f', 
+                        '--filename', 
                         required=True, 
-                        help='company symbol on stock (i. e. WDC)')
-    parser.add_argument('--from-csv', 
-                        help='path to wiki csv file')
-    parser.add_argument('-s', 
-                        '--start-date', 
-                        default='2018-01-01', 
-                        help='example: %(default)s')
+                        help='named of REBOUND binary to continue')
+
     return parser.parse_args()
 
 
 def main():
-    #args = _parse_args()
+    args = _parse_args()
+    sa = rebound.SimulationArchive(args.filename)
+    sim = sa[0]
+    P0 = sim.particles[1].P
+    sim = sa[-1]
+    sim.automateSimulationArchive(filename, interval=1e3)
 
+    try:
+        sim.integrate(1e4*P0) # hardcoded to run for a billion orbits
+    except rebound.Collision:
+        sim.simulationarchive_snapshot(args.filename)
 
 if __name__ == '__main__':
     main()

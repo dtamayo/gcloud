@@ -70,9 +70,9 @@ endif
 
 # This inserts your bucketname into the run shell script
 htcondor/run_htcondor.sh:
-	cp htcondor/run_montecarlo.sh.orig htcondor/run_montecarlo.sh
+	cp htcondor/run.sh.orig htcondor/run.sh
 ifneq ($(bucketname),)
-	sed -i 's/YOURBUCKETNAME/${bucketname}/g' htcondor/run_montecarlo.sh 
+	sed -i 's/YOURBUCKETNAME/${bucketname}/g' htcondor/run.sh 
 endif
 
 createcluster:
