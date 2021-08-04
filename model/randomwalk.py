@@ -49,10 +49,7 @@ def _parse_args():
 
 
 def main():
-    args = _parse_args()
-    data_model = DataModel(args.company, args.start_date)
-    data_model.from_csv = args.from_csv
-    data_model.run()
+    #args = _parse_args()
 
 
 if __name__ == '__main__':

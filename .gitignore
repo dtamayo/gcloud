@@ -1,0 +1,4 @@
+*.swp
+data/input/run*
+data/output/run*
+data/running/run*
