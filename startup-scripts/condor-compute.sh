@@ -16,7 +16,8 @@
 
 #### This is the setup required for Condor ####
 
-apt-get update && apt-get install -y wget curl net-tools vm apt-transport-https
+apt-get update && apt-get install -y wget curl net-tools vm apt-transport-https python3-pip
+pip3 install numpy pandas rebound
 echo "deb http://research.cs.wisc.edu/htcondor/debian/stable/ jessie contrib" >> /etc/apt/sources.list
 wget -qO - http://research.cs.wisc.edu/htcondor/debian/HTCondor-Release.gpg.key | apt-key add -
 apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y condor=8.4.11~dfsg.1-1
@@ -41,8 +42,7 @@ update-rc.d condor enable
 #### This is the setup required for our specific compute scripts ####
 #### I need to install numpy pandas and rebound 
 
-apt-get install -y python3-distutils python3-pip
+#apt-get install -y python3-distutils python3-pip
 #pip3 install virtualenv
 #virtualenv venv
 #source venv/bin/activate
-pip3 install numpy pandas rebound
