@@ -14,17 +14,7 @@
 # limitations under the License.
 #
 import argparse
-import csv
-import math
-import pickle
-from os import path, makedirs
-from random import randint
-from sys import exit, stdout, stderr
-from time import sleep
-
-import numpy
-import pandas
-
+import rebound
 
 def _parse_args():
     parser = argparse.ArgumentParser('continue_sim', 

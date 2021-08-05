@@ -56,7 +56,7 @@ deleteimages:
 	-gcloud compute images delete --quiet condor-compute
 	-gcloud compute images delete --quiet condor-submit
 
-upload: htcondor/run_htcondor.sh
+upload: htcondor/run.sh
 ifeq ($(bucketname),)
 	@echo "Need to create bucket on google cloud and run with"
 	@echo "make upload bucketname=insert_bucket_name"
@@ -69,7 +69,7 @@ else
 endif
 
 # This inserts your bucketname into the run shell script
-htcondor/run_htcondor.sh:
+htcondor/run.sh:
 	cp htcondor/run.sh.orig htcondor/run.sh
 ifneq ($(bucketname),)
 	sed -i 's/YOURBUCKETNAME/${bucketname}/g' htcondor/run.sh 
