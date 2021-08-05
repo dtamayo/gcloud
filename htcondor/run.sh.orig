@@ -2,5 +2,5 @@
 export HOME=`pwd`
 
 chmod +x ./continue_sim.py
-./continue_sim.py -f $1
+python3 continue_sim.py -f $1
 CLOUDSDK_PYTHON=/usr/bin/python gsutil -m cp *.bin gs://YOURBUCKETNAME/data/output/

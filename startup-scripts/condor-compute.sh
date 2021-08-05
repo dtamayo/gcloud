@@ -42,7 +42,7 @@ update-rc.d condor enable
 #### I need to install numpy pandas and rebound 
 
 apt-get install -y python3-distutils python3-pip
-pip3 install virtualenv
-virtualenv venv
-source venv/bin/activate
-pip install numpy pandas rebound
+#pip3 install virtualenv
+#virtualenv venv
+#source venv/bin/activate
+pip3 install numpy pandas rebound
