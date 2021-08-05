@@ -1,4 +1,4 @@
-# Copyright 2018 Google LLC
+#Copyright 2018 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,11 +16,6 @@
 #
 # basic commandlines stored that execute the various pieces of the demonstration
 
-test:
-ifeq ($(BUCKETNAME),)
-	@echo "bucketname not set"
-endif
-
 show:
 	cat README.md
 
@@ -35,7 +30,7 @@ condor-master condor-compute condor-submit:
 	   gcloud compute  instances create  $@-template \
 	     --zone=us-east1-b \
 	     --machine-type=n1-standard-1 \
-	     --image=debian-9-stretch-v20210216 \
+	     --image=debian-9-stretch-v20210721 \
 	     --image-project=debian-cloud \
 	     --boot-disk-size=10GB \
 	     --metadata-from-file startup-script=startup-scripts/$@.sh ; \
