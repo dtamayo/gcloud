@@ -60,6 +60,7 @@ else
 	-gsutil mb gs://${bucketname}
 	gsutil cp -r data gs://${bucketname}/
 	gsutil cp continue_sim.py gs://${bucketname}/
+	gsutil cp make_initial_conditions.py gs://${bucketname}/
 	gsutil cp htcondor/* gs://${bucketname}/htcondor/
 endif
 
@@ -100,4 +101,4 @@ else
 endif
 
 clean:
-	rm link.file WIKI_PRICES*.zip WIKI_PRICES*.csv 
+	rm htcondor/run.sh
