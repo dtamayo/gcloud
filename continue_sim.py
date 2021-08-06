@@ -34,7 +34,7 @@ def main():
     sim = sa[0]
     P0 = sim.particles[1].P
     sim = sa[-1]
-    sim.automateSimulationArchive(filename, interval=1e3)
+    sim.automateSimulationArchive(args.filename, interval=1e3)
 
     try:
         sim.integrate(1e4*P0) # hardcoded to run for a billion orbits

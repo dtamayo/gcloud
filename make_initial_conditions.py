@@ -1,6 +1,6 @@
 import rebound
 
-for i in range(10):
+for i in range(1, 10):
     sim = rebound.Simulation()
     sim.add(m=1.)
     sim.add(a=i)
