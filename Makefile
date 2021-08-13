@@ -68,7 +68,7 @@ endif
 htcondor/run.sh:
 	cp htcondor/run.sh.orig htcondor/run.sh
 ifneq ($(bucketname),)
-	sed -i 's/YOURBUCKETNAME/${bucketname}/g' htcondor/run.sh 
+	sed -i 's/YOURBUCKETNAME/${bucketname}/g' htcondor/${bucketname}.sh 
 endif
 
 createcluster:
