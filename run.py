@@ -18,15 +18,16 @@ def main():
     args = _parse_args()
     bucketname = args.bucketname
 
-    call("gsutil cp -m gs://{0}/data/unfinished/* gs://{0}/data/backup/".format(bucketname), shell=True)
-    call("gsutil cp -m gs://{0}/data/unfinished/* {0}/".format(bucketname), shell=True)
+    call("gsutil -m cp gs://{0}/data/unfinished/* gs://{0}/data/backup/".format(bucketname), shell=True)
+    call("mkdir {0}".format(bucketname), shell=True)
+    call("gsutil -m cp gs://{0}/data/unfinished/* {0}/".format(bucketname), shell=True)
 
     for root, dirs, files in os.walk('{0}/'.format(bucketname)):
         for file in files:
             if 'run' in file:
                 run_num = file[3:7]
 
-                with open("htcondor/submit-job", "w") as of:
+                with open("submit-job", "w") as of:
                     of.write("#!/bin/bash -l\n")
                     of.write("executable\t\t\t\t= {0}.sh\n".format(bucketname))
                     of.write("arguments\t\t\t\t= {0}\n".format(file))
