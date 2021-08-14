@@ -1,5 +1,6 @@
 import os
 import argparse
+from subprocess import call
 
 def _parse_args():
     parser = argparse.ArgumentParser('run', 
@@ -17,12 +18,12 @@ def main():
     args = _parse_args()
     bucketname = args.bucketname
 
-    call("gsutil cp gs://{0}/data/unfinished/* gs://{0}/data/backup/".format(bucketname), shell=True)
+    call("gsutil cp -m gs://{0}/data/unfinished/* gs://{0}/data/backup/".format(bucketname), shell=True)
+    call("gsutil cp -m gs://{0}/data/unfinished/* {0}/".format(bucketname), shell=True)
 
-    for root, dirs, files in os.walk('gs://{0}/data/unfinished/'.format(bucketname)):
+    for root, dirs, files in os.walk('{0}/'.format(bucketname)):
         for file in files:
             if 'run' in file:
-                call("gsutil cp gs://{0}/data/unfinished/* {0}/".format(bucketname), shell=True)
                 run_num = file[3:7]
 
                 with open("htcondor/submit-job", "w") as of:
