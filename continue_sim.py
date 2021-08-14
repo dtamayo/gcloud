@@ -27,17 +27,16 @@ def _parse_args():
 
     return parser.parse_args()
 
-
 def main():
     args = _parse_args()
     sa = rebound.SimulationArchive(args.filename)
     sim = sa[0]
     P0 = sim.particles[1].P
     sim = sa[-1]
-    sim.automateSimulationArchive(args.filename, interval=1e5*P0)
+    sim.automateSimulationArchive(args.filename, interval=1e6*P0)
 
     try:
-        sim.integrate(sim.t + 1e6*P0) # hardcoded to run for a billion orbits
+        sim.integrate(sim.t + 2.5e9*P0) 
     except rebound.Collision:
         sim.simulationarchive_snapshot(args.filename)
 

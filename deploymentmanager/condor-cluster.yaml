@@ -22,7 +22,7 @@ resources:
   type: condor.jinja
   properties:
     count: 0    # number of regular instances in pool 
-    pvmcount: 4 # number of pre-emptible instances in pool
+    pvmcount: 25 # number of pre-emptible instances in pool
     zone: us-east1-b
     email: dtamayo@astro.princeton.edu
     instancetype: n1-standard-1
