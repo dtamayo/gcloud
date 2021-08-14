@@ -66,8 +66,8 @@ endif
 
 # This inserts your bucketname into the run shell script
 htcondor/run.sh:
-	cp htcondor/run.sh.orig htcondor/run.sh
 ifneq ($(bucketname),)
+	cp htcondor/run.sh.orig htcondor/${bucketname}.sh
 	sed -i 's/YOURBUCKETNAME/${bucketname}/g' htcondor/${bucketname}.sh 
 endif
 
