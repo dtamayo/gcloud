@@ -25,9 +25,9 @@ def main():
     bucketname = args.bucketname
     orbmax = float(args.orbmax)
 
-    call("gsutil -m cp gs://{0}/data/unfinished/* gs://{0}/data/backup/".format(bucketname), shell=True)
+    call("gsutil -m cp gs://{0}/data/unfinished/*.bin gs://{0}/data/backup/".format(bucketname), shell=True)
     call("mkdir {0}".format(bucketname), shell=True)
-    call("gsutil -m cp gs://{0}/data/unfinished/* {0}/".format(bucketname), shell=True)
+    call("gsutil -m cp gs://{0}/data/unfinished/*.bin {0}/".format(bucketname), shell=True)
 
     for root, dirs, files in os.walk('{0}/'.format(bucketname)):
         for file in files:
