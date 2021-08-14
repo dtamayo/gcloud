@@ -39,7 +39,7 @@ def main():
                 if sim.t/P0 > orbmax or sim._status == 7: # exceeded max # of orbits or status=7 means had a collision this dt
                     print('Binary {0} finished'.format(file))
                     call("gsutil mv gs://{0}/data/unfinished/{1} gs://{0}/data/finished/".format(bucketname, file), shell=True)
-                    call("gsutil rm {0}/{1}".format(bucketname, file)
+                    call("rm {0}/{1}".format(bucketname, file), shell=True)
 
     for root, dirs, files in os.walk('{0}/'.format(bucketname)):
         for file in files:
