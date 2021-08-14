@@ -31,7 +31,7 @@ def main():
 
     for root, dirs, files in os.walk('{0}/'.format(bucketname)):
         for file in files:
-            if 'run' in file:
+            if file.endswith('bin'):
                 sa = rebound.SimulationArchive('{0}/{1}'.format(bucketname, file))
                 sim = sa[0]
                 P0 = sim.particles[1].P
@@ -43,7 +43,7 @@ def main():
 
     for root, dirs, files in os.walk('{0}/'.format(bucketname)):
         for file in files:
-            if 'run' in file:
+            if file.endswith('bin'):
                 run_num = file[3:7]
                 
                 with open("submit-job", "w") as of:
