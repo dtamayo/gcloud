@@ -1,8 +1,8 @@
 #! /bin/bash
 export HOME=`pwd`
 
-CLOUDSDK_PYTHON=/usr/bin/python gsutil -m mv gs://YOURBUCKETNAME/data/queued/$1 gs://YOURBUCKETNAME/data/running/$1  
+CLOUDSDK_PYTHON=/usr/bin/python gsutil mv gs://YOURBUCKETNAME/data/queued/$1 gs://YOURBUCKETNAME/data/running/$1  
 chmod +x ./continue_sim.py
 python3 continue_sim.py -f $1
-CLOUDSDK_PYTHON=/usr/bin/python gsutil -m cp $1 gs://YOURBUCKETNAME/data/successes/
-CLOUDSDK_PYTHON=/usr/bin/python gsutil -m rm gs://YOURBUCKETNAME/data/running/$1
+CLOUDSDK_PYTHON=/usr/bin/python gsutil cp $1 gs://YOURBUCKETNAME/data/successes/
+CLOUDSDK_PYTHON=/usr/bin/python gsutil rm gs://YOURBUCKETNAME/data/running/$1
