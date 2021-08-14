@@ -1,6 +1,7 @@
 import os
 import argparse
 from subprocess import call
+import rebound
 
 def _parse_args():
     parser = argparse.ArgumentParser('run', 
@@ -10,6 +11,11 @@ def _parse_args():
                         '--bucketname', 
                         required=True, 
                         help='Google Cloud bucketname used to store data')
+    
+    parser.add_argument('-o', 
+                        '--orbmax', 
+                        required=True, 
+                        help='Maximum number of orbits before we move binary to finished folder')
 
     return parser.parse_args()
 
@@ -17,6 +23,7 @@ def _parse_args():
 def main():
     args = _parse_args()
     bucketname = args.bucketname
+    orbmax = float(args.orbmax)
 
     call("gsutil -m cp gs://{0}/data/unfinished/* gs://{0}/data/backup/".format(bucketname), shell=True)
     call("mkdir {0}".format(bucketname), shell=True)
@@ -26,22 +33,30 @@ def main():
         for file in files:
             if 'run' in file:
                 run_num = file[3:7]
+                
+                sa = rebound.SimulationArchive('{0}/{1}'.format(bucketname, file))
+                sim = sa[0]
+                P0 = sim.particles[1].P
+                sim = sa[-1]
+                if sim.t/P0 > orbmax:
+                    print('Binary {0} finished'.format(file))
+                    call("gsutil mv gs://{0}/data/unfinished/{1} gs://{0}/data/finished/".format(bucketname, file), shell=True)
+                else:
+                    with open("submit-job", "w") as of:
+                        of.write("#!/bin/bash -l\n")
+                        of.write("executable\t\t\t\t= {0}.sh\n".format(bucketname))
+                        of.write("arguments\t\t\t\t= {0}\n".format(file))
+                        of.write("transfer_input_files\t= continue_sim.py, {0}.sh, {0}/{1}\n".format(bucketname, file))
+                        of.write("should_transfer_files\t= IF_NEEDED\n")
+                        of.write('Transfer_Output_Files\t= ""\n')
+                        of.write("when_to_transfer_output\t= ON_EXIT\n")
+                        of.write("log\t\t\t\t\t\t= {0}/run.{1}.log\n".format(bucketname, run_num))
+                        of.write("Error\t\t\t\t\t= {0}/err.{1}\n".format(bucketname, run_num))
+                        of.write("Output\t\t\t\t\t= {0}/out.{1}\n".format(bucketname, run_num))
+                        of.write("queue")
 
-                with open("submit-job", "w") as of:
-                    of.write("#!/bin/bash -l\n")
-                    of.write("executable\t\t\t\t= {0}.sh\n".format(bucketname))
-                    of.write("arguments\t\t\t\t= {0}\n".format(file))
-                    of.write("transfer_input_files\t= continue_sim.py, {0}.sh, {0}/{1}\n".format(bucketname, file))
-                    of.write("should_transfer_files\t= IF_NEEDED\n")
-                    of.write('Transfer_Output_Files\t= ""\n')
-                    of.write("when_to_transfer_output\t= ON_EXIT\n")
-                    of.write("log\t\t\t\t\t\t= {0}/run.{1}.log\n".format(bucketname, run_num))
-                    of.write("Error\t\t\t\t\t= {0}/err.{1}\n".format(bucketname, run_num))
-                    of.write("Output\t\t\t\t\t= {0}/out.{1}\n".format(bucketname, run_num))
-                    of.write("queue")
-
-                call("condor_submit submit-job", shell=True)
-                call("gsutil mv gs://{0}/data/unfinished/{1} gs://{0}/data/queued/".format(bucketname, file), shell=True)
+                    call("condor_submit submit-job", shell=True)
+                    call("gsutil mv gs://{0}/data/unfinished/{1} gs://{0}/data/queued/".format(bucketname, file), shell=True)
 
 if __name__ == '__main__':
     main()
