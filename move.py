@@ -17,8 +17,8 @@ def main():
     args = _parse_args()
     bucketname = args.bucketname
 
-    call("gsutil -m mv gs://{0}/data/successes/* gs://{0}/data/unfinished/".format(bucketname), shell=True)
-    call("gsutil -m mv gs://{0}/data/failures/* gs://{0}/data/unfinished/".format(bucketname), shell=True)
+    call("gsutil -m mv gs://{0}/data/successes/*.bin gs://{0}/data/unfinished/".format(bucketname), shell=True)
+    call("gsutil -m mv gs://{0}/data/failures/*.bin gs://{0}/data/unfinished/".format(bucketname), shell=True)
 
 if __name__ == '__main__':
     main()
