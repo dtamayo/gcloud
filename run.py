@@ -38,7 +38,7 @@ def main():
                 sim = sa[0]
                 P0 = sim.particles[1].P
                 sim = sa[-1]
-                if sim.t/P0 > orbmax:
+                if sim.t/P0 > orbmax or sim._status == 7: # exceeded max # of orbits or status=7 means had a collision this dt
                     print('Binary {0} finished'.format(file))
                     call("gsutil mv gs://{0}/data/unfinished/{1} gs://{0}/data/finished/".format(bucketname, file), shell=True)
                 else:
