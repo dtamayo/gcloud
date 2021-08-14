@@ -37,7 +37,7 @@ def main():
     sim.automateSimulationArchive(args.filename, interval=1e5*P0)
 
     try:
-        sim.integrate(1e6*P0) # hardcoded to run for a billion orbits
+        sim.integrate(sim.t + 1e6*P0) # hardcoded to run for a billion orbits
     except rebound.Collision:
         sim.simulationarchive_snapshot(args.filename)
 
