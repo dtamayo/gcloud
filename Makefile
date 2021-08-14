@@ -59,6 +59,7 @@ else
 	@echo "using ${bucketname}"
 	-gsutil mb gs://${bucketname}
 	gsutil -m cp -r data gs://${bucketname}/
+	gsutil cp move.py gs://${bucketname}/
 	gsutil cp run.py gs://${bucketname}/
 	gsutil cp continue_sim.py gs://${bucketname}/
 	gsutil cp htcondor/* gs://${bucketname}/htcondor/
@@ -88,6 +89,8 @@ else
 	@echo "using ${bucketname}"
 	@echo "before sshing to the submit host, let me copy some of the files there to make"
 	@echo "it easier for you."
+	@echo "  - copying move.py"
+	gcloud compute ssh condor-submit --command "gsutil cp gs://${bucketname}/move.py ."
 	@echo "  - copying run.py"
 	gcloud compute ssh condor-submit --command "gsutil cp gs://${bucketname}/run.py ."
 	@echo "  - copying continue_sim.py"
