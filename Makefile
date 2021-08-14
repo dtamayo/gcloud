@@ -87,6 +87,8 @@ else
 	@echo "using ${bucketname}"
 	@echo "before sshing to the submit host, let me copy some of the files there to make"
 	@echo "it easier for you."
+	@echo "  - copying run.py"
+	gcloud compute ssh condor-submit --command "gsutil cp gs://${bucketname}/run.py ."
 	@echo "  - copying continue_sim.py"
 	gcloud compute ssh condor-submit --command "gsutil cp gs://${bucketname}/continue_sim.py ."
 	@echo "  - copying the condor submit files templates"
