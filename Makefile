@@ -59,6 +59,7 @@ else
 	@echo "using ${bucketname}"
 	-gsutil mb gs://${bucketname}
 	gsutil cp -r data gs://${bucketname}/
+	gsutil cp run.py gs://${bucketname}/
 	gsutil cp continue_sim.py gs://${bucketname}/
 	gsutil cp htcondor/* gs://${bucketname}/htcondor/
 endif
