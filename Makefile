@@ -60,7 +60,6 @@ else
 	-gsutil mb gs://${bucketname}
 	gsutil cp -r data gs://${bucketname}/
 	gsutil cp continue_sim.py gs://${bucketname}/
-	gsutil cp make_initial_conditions.py gs://${bucketname}/
 	gsutil cp htcondor/* gs://${bucketname}/htcondor/
 endif
 
@@ -88,17 +87,10 @@ else
 	@echo "using ${bucketname}"
 	@echo "before sshing to the submit host, let me copy some of the files there to make"
 	@echo "it easier for you."
-	@echo "  - copying data files"
-	gcloud compute ssh condor-submit --command "gsutil cp -r gs://${bucketname}/data ."
 	@echo "  - copying continue_sim.py"
 	gcloud compute ssh condor-submit --command "gsutil cp gs://${bucketname}/continue_sim.py ."
-	@echo "  - copying make_initial_conditions.py"
-	gcloud compute ssh condor-submit --command "gsutil cp gs://${bucketname}/make_initial_conditions.py ."
 	@echo "  - copying the condor submit files templates"
 	gcloud compute ssh condor-submit --command "gsutil cp gs://${bucketname}/htcondor/* ."
 	@echo "now just sshing"
 	gcloud compute ssh condor-submit
 endif
-
-clean:
-	rm htcondor/run.sh
